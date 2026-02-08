@@ -1,0 +1,16 @@
+{
+    "name": "jandev/appointments-newsletter",
+    "description": "Integrates Appointments+ with jan-newsletter",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Jan Dev",
+            "email": "jan@jandev.eu"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.1"
+    }
+}
