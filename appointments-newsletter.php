@@ -101,10 +101,31 @@ function app_newsletter_subscribe($app) {
         'status' => 'subscribed',
         'source' => 'appointment',
         'custom_fields' => $custom_fields,
-        'ip_address' => $_SERVER['REMOTE_ADDR'] ?? '',
+        'ip_address' => app_newsletter_get_client_ip(),
     ]);
 
     $subscriber_repo->add_to_list($subscriber_id, $list_id);
+}
+
+/**
+ * Get validated client IP (Cloudflare-aware)
+ */
+function app_newsletter_get_client_ip(): string {
+    $headers = ['HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_REAL_IP', 'REMOTE_ADDR'];
+
+    foreach ($headers as $header) {
+        if (!empty($_SERVER[$header])) {
+            $ip = $_SERVER[$header];
+            if (strpos($ip, ',') !== false) {
+                $ip = trim(explode(',', $ip)[0]);
+            }
+            if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                return $ip;
+            }
+        }
+    }
+
+    return '';
 }
 
 /**
